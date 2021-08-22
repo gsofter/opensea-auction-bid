@@ -1,13 +1,36 @@
 import React from "react";
 import { Layout, Button } from "antd";
-import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
+import { InjectedConnector } from "@web3-react/injected-connector";
 import "./MainLayout.css";
+
+export const injected = new InjectedConnector({
+  supportedChainIds: [1, 3, 4, 5, 42],
+});
 
 const { Header, Content, Footer } = Layout;
 
 export const MainLayout: React.FC = ({ children }) => {
-  const { sdk, connected, safe } = useSafeAppsSDK();
-  console.log(safe.safeAddress);
+  const { activate, deactivate, account, library, chainId } = useWeb3React();
+
+  const handleConnectWallet = () => {
+    if (!account) {
+      activate(injected, undefined, true)
+        .then((res) => {})
+        .catch((error) => {
+          if (error instanceof UnsupportedChainIdError) {
+            activate(injected);
+          } else {
+            console.info("Connection Error - ", error);
+          }
+        });
+    }
+  };
+
+  const shortenAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(address.length - 5)}`;
+  };
+
   return (
     <Layout>
       <Header
@@ -21,10 +44,20 @@ export const MainLayout: React.FC = ({ children }) => {
         }}
       >
         <h3 style={{ color: "wheat", float: "left" }}> OpenSea Auction </h3>
-        <Button type="primary" style={{ float: "right" }}>
-          {" "}
-          Connect Wallet{" "}
-        </Button>
+        {!account && (
+          <Button
+            type="primary"
+            style={{ float: "right" }}
+            onClick={handleConnectWallet}
+          >
+            Connect Wallet
+          </Button>
+        )}
+        {account && (
+          <p style={{ float: "right", color: "white" }}>
+            {shortenAddress(account)}
+          </p>
+        )}
       </Header>
       <Content
         className="site-layout"

@@ -4,12 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import SafeProvider from "@gnosis.pm/safe-apps-react-sdk";
+import { Web3ReactProvider } from "@web3-react/core";
+import { getLibrary } from "./utils";
 
 ReactDOM.render(
   <React.StrictMode>
-    <SafeProvider>
-      <App />
-    </SafeProvider>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <SafeProvider>
+        <App />
+      </SafeProvider>
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
