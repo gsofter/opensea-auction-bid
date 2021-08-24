@@ -43,7 +43,7 @@ export const MainLayout: React.FC = ({ children }) => {
           alignItems: "center",
         }}
       >
-        <h3 style={{ color: "wheat", float: "left" }}> OpenSea Auction </h3>
+        <h3 style={{ color: "wheat", float: "left" }}> gMold NFT Auction </h3>
         {!account && (
           <Button
             type="primary"

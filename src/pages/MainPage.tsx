@@ -1,9 +1,21 @@
 import React from "react";
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, message } from "antd";
+import Web3 from "web3";
+import { Web3Adapter } from "@gnosis.pm/safe-core-sdk";
+import Safe from "@gnosis.pm/safe-core-sdk";
+import { useWeb3React } from "@web3-react/core";
+import { SAFE_ADDRESS } from "../constants";
+import { SafeTransactionDataPartial } from "@gnosis.pm/safe-core-sdk-types";
 
 const BidForm: React.FC = () => {
-  const onFinish = (values: any) => {
+  const { account, library } = useWeb3React();
+  const onFinish = async (values: any) => {
     console.log("Success:", values);
+    try {
+    } catch (e) {
+      console.log(e);
+      message.error(e.message || "Error on submit");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -20,8 +32,8 @@ const BidForm: React.FC = () => {
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        label="OpenSea URL"
-        name="bidUrl"
+        label="NFT ID"
+        name="nftId"
         rules={[{ required: true, message: "Please input your opensea url!" }]}
       >
         <Input />
